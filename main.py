@@ -21,7 +21,7 @@ if __name__ == '__main__':
         img = generate_image(prompt)
 
         if img:
-            annotated_img = annotate(img, line)
+            annotated_img = annotate(img, line.lower())
             save_fig(annotated_img, song_title, artist, summarizer)
         else:
             print("There's been a problem generating the image. Please try again.")

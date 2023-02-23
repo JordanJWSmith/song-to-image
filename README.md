@@ -74,9 +74,17 @@ This API is rate limited and doesn't afford as much flexibility compared to acce
 I'm keen to keep this project lightweight instead of downloading huge model weights. 
 
 The returned image is annotated with the central lyric and saved. 
+If the lyric is too long to fit onto the image, the border width is increased and the text is wrapped.
 
-![Landslide by Fleetwood Mac](examples/landslide.jpg)
+|              Landslide by Fleetwood Mac               |
+|:-----------------------------------------------------:|
+| ![Landslide by Fleetwood Mac](examples/landslide.jpg) |
 
+|                  October Sky by Yebba                   |
+|:-------------------------------------------------------:|
+| ![Landslide by Fleetwood Mac](examples/october_sky.png) |
+
+test_october_sky_lsa_23-02-23-172558.png
 ## Next Steps
 
 ### Experiment with more complex prompt engineering
