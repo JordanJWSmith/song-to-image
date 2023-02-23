@@ -75,6 +75,8 @@ I'm keen to keep this project lightweight rather than downloading huge model wei
 
 The returned image is annotated with the central lyric and saved. 
 
+![Landslide by Fleetwood Mac](examples/landslide.jpg)
+
 ## Next Steps
 - Experiment with more complex prompt engineering.
   - Use a [prompt generator model](https://huggingface.co/succinctly/text2image-prompt-generator) from Hugging Face to 
