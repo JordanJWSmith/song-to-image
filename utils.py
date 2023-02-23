@@ -1,5 +1,7 @@
 import os
 import re
+import PIL
+import textwrap
 import lyricsgenius
 import requests as r
 from io import BytesIO
@@ -77,16 +79,22 @@ def generate_image(prompt):
     # endpoint_url = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4"
     endpoint_url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
 
-    payload = {
-        "inputs": prompt
-    }
+    payload = {"inputs": prompt}
     headers = {
         "Authorization": f"Bearer {HF_TOKEN}",
         "Content-Type": "application/json",
         "Accept": "image/png"
     }
     response = r.post(endpoint_url, headers=headers, json=payload)
-    img = Image.open(BytesIO(response.content))
+
+    try:
+        img = Image.open(BytesIO(response.content))
+        img.save('examples/test_image_yebba.png')
+
+    except PIL.UnidentifiedImageError as e:
+        print('API response:', response.content)
+        print(e)
+        return None
 
     print('Done.')
     return img
@@ -102,13 +110,26 @@ def annotate(img, caption):
     text_size = draw.textsize(caption, font=font)
 
     x = (img_with_border.width - text_size[0]) / 2
-    y = img_with_border.height - (border_size/2) - text_size[1] + 7
-    draw.text((x, y), caption.lower(), fill='red', font=font)
+    y = img_with_border.height - (border_size / 2) - text_size[1] + 7
+
+    if text_size[0] > img_with_border.width:
+        midpoint = len(caption) // 2
+
+        for i, line in enumerate(textwrap.wrap(caption, width=midpoint + 5)):
+            line_text_size = draw.textsize(line, font=font)
+            line_x = (img_with_border.width - line_text_size[0]) / 2
+            line_y = y + (font_size * i) + 7
+
+            draw.text((line_x, line_y), line, fill='red', font=font)
+
+        img_with_border = ImageOps.expand(img_with_border, border=int(border_size * 0.5), fill='black')
+    else:
+        draw.text((x, y), caption, fill='red', font=font)
 
     return img_with_border
 
 
-def save_fig(img, song_title, artist, summarizer):
+def save_fig(img, song_title, artist, summarizer, test=False):
     chars = r'[<>:"/\\|?*\s]'
     song_title = re.sub(chars, '_', song_title).lower()
     artist = artist.lower().replace(" ", "_")
@@ -116,7 +137,12 @@ def save_fig(img, song_title, artist, summarizer):
     now = datetime.now()
     str_timestamp = now.strftime("%d-%m-%y-%H%M%S")
 
-    save_dir = os.path.join('output', f'{song_title}_{artist}')
+    if test:
+        save_dir = 'test_images'
+    else:
+        save_dir = 'output'
+
+    save_dir = os.path.join(f'{save_dir}', f'{song_title}_{artist}')
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 

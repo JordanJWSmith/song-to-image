@@ -31,6 +31,5 @@ if __name__ == '__main__':
 
 
 # TODO: debug maximum line length
-# TODO: remove contents of brackets from lyrics
 # TODO: use textbbox or textlength instead of textsize
 
