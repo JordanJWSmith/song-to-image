@@ -27,7 +27,6 @@ summarizers = {
 
 
 def process_args(args):
-    # TODO: check whether summarizer in summarizers
     if args.summarizer not in summarizers.keys():
         raise KeyError(f'The specified summarizer is not available. Please choose from: {list(summarizers.keys())}')
     return args.title.title(), args.artist.title(), args.summarizer
@@ -67,18 +66,25 @@ def generate_prompt(text, title, artist):
 
 
 def generate_image(prompt):
-    endpoint_url = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4"
+    for i in range(10):
+        try:
+            print('Generating image...')
+            # endpoint_url = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4"
+            endpoint_url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
 
-    payload = {"inputs": prompt}
-    headers = {
-        "Authorization": f"Bearer {HF_TOKEN}",
-        "Content-Type": "application/json",
-        "Accept": "image/png" # important to get an image back
-    }
-    response = r.post(endpoint_url, headers=headers, json=payload)
-    img = Image.open(BytesIO(response.content))
+            payload = {"inputs": prompt}
+            headers = {
+                "Authorization": f"Bearer {HF_TOKEN}",
+                "Content-Type": "application/json",
+                "Accept": "image/png"
+            }
+            response = r.post(endpoint_url, headers=headers, json=payload)
+            img = Image.open(BytesIO(response.content))
 
-    return img
+            return img
+        except:
+            continue
+    return None
 
 
 def annotate(img, caption):
@@ -91,7 +97,7 @@ def annotate(img, caption):
 
     x = (img_with_border.width - text_size[0]) / 2
     y = img_with_border.height - (border_size/2) - text_size[1] + 7
-    draw.text((x, y), caption, fill='red', font=font)
+    draw.text((x, y), caption.lower(), fill='red', font=font)
 
     return img_with_border
 

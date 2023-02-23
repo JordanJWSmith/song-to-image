@@ -19,8 +19,12 @@ if __name__ == '__main__':
         line = extract_lyric(lyrics, summarizer)
         prompt = generate_prompt(line, song_title, artist)
         img = generate_image(prompt)
-        annotated_img = annotate(img, line)
-        save_fig(annotated_img, song_title, artist, summarizer)
+
+        if img:
+            annotated_img = annotate(img, line)
+            save_fig(annotated_img, song_title, artist, summarizer)
+        else:
+            print("There's been a problem generating the image. Please try again.")
 
     else:
         print("There's been a problem retrieving lyrics. Did you spell correctly?")
@@ -29,5 +33,4 @@ if __name__ == '__main__':
 # TODO: debug maximum line length
 # TODO: remove contents of brackets from lyrics
 # TODO: use textbbox or textlength instead of textsize
-# TODO: validate args
 
