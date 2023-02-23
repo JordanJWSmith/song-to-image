@@ -47,8 +47,13 @@ def get_lyrics(title, artist):
 
 def process_lyrics(text):
     lyrics = text.split('\n')[:-1]
-    if 'You might also like' in lyrics:  # often webscraped erroneously
+
+    brackets = r'\s*\([^()]*\)'
+    lyrics = [re.sub(brackets, '', line) for line in lyrics]  # remove contents of parentheses, i.e. "(whoa-oh)"
+
+    if 'You might also like' in lyrics:  # often webscraped erroneously from Genius
         lyrics.remove('You might also like')
+
     lyrics = '\n'.join(lyrics)
     return lyrics
 
@@ -106,7 +111,6 @@ def annotate(img, caption):
 def save_fig(img, song_title, artist, summarizer):
     chars = r'[<>:"/\\|?*\s]'
     song_title = re.sub(chars, '_', song_title).lower()
-    # song_title = song_title.lower().replace(" ", "_")
     artist = artist.lower().replace(" ", "_")
 
     now = datetime.now()
