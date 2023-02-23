@@ -4,6 +4,7 @@ import lyricsgenius
 import requests as r
 from io import BytesIO
 from datetime import datetime
+from dotenv import load_dotenv
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.summarizers.luhn import LuhnSummarizer
@@ -15,9 +16,10 @@ summarizers = {
     'lsa': LsaSummarizer()
 }
 
-GENIUS_TOKEN = "o6J2ynO-NVhUFOsm_DKS5pVyzlq5DY6PmOxScdJ-EK_kdKu_Kapz-zJKzDTfEL9a"
-HF_TOKEN = "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"
+load_dotenv()
 
+GENIUS_TOKEN = os.getenv('GENIUS_TOKEN')
+HF_TOKEN = os.getenv('HF_TOKEN')
 
 def get_lyrics(args):
     for i in range(10):
@@ -60,7 +62,6 @@ def generate_image(prompt):
         "Accept": "image/png" # important to get an image back
     }
     response = r.post(endpoint_url, headers=headers, json=payload)
-    print(response)
     img = Image.open(BytesIO(response.content))
 
     return img

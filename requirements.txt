@@ -6,3 +6,4 @@ sumy
 Pillow
 requests
 numpy
+python-dotenv
