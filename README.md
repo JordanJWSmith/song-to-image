@@ -86,3 +86,7 @@ The returned image is annotated with the central lyric and saved.
   - Strip the lyrics to plaintext and use a 
   [punctuator model](https://huggingface.co/oliverguhr/fullstop-punctuation-multilang-large?text=Yet+she+blushed+as+if+with+guilt+when+Cynthia+reading+her+thoughts+said+to+her+one+day+Molly+you%27re+very+glad+to+get+rid+of+us+are+not+you) to convert lyrics to prose. This may be more compatible with summarizer models.
   - Remove contents of brackets from lyrics. This is often `("whoah-oh)` or something similar. 
+- Eventually I'd like to turn this into a web app with smooth UX
+  - Add Spotify login
+  - Allow users to generate images for their most-played songs, etc
+  - Create a 'scrapbook' of images for a given playlist
