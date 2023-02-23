@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
 from sumy.summarizers.luhn import LuhnSummarizer
+from sumy.summarizers.lex_rank import LexRankSummarizer
 from sumy.parsers.plaintext import PlaintextParser
 from PIL import Image, ImageOps, ImageDraw, ImageFont
 
@@ -20,21 +21,24 @@ genius.remove_section_headers = True
 
 summarizers = {
     'luhn': LuhnSummarizer(),
-    'lsa': LsaSummarizer()
+    'lsa': LsaSummarizer(),
+    'lexrank': LexRankSummarizer()
 }
 
 
 def process_args(args):
     # TODO: check whether summarizer in summarizers
+    if args.summarizer not in summarizers.keys():
+        raise KeyError(f'The specified summarizer is not available. Please choose from: {list(summarizers.keys())}')
     return args.title.title(), args.artist.title(), args.summarizer
 
 
-def get_lyrics(args):
+def get_lyrics(title, artist):
     # Scraping the lyrics can sometimes time out.
     # Give it 10 tries before giving up.
     for i in range(10):
         try:
-            song = genius.search_song(args.title, args.artist)
+            song = genius.search_song(title, artist)
             return song
         except Exception:
             continue

@@ -11,10 +11,11 @@ if not args.summarizer:
     args.summarizer = 'luhn'
 
 if __name__ == '__main__':
-    song = get_lyrics(args)
+    song_title, artist, summarizer = process_args(args)
+    song = get_lyrics(song_title, artist)
+
     if song:
         lyrics = process_lyrics(song.lyrics)
-        song_title, artist, summarizer = process_args(args)
         line = extract_lyric(lyrics, summarizer)
         prompt = generate_prompt(line, song_title, artist)
         img = generate_image(prompt)
@@ -22,7 +23,7 @@ if __name__ == '__main__':
         save_fig(annotated_img, song_title, artist, summarizer)
 
     else:
-        print("There's been a problem retrieving lyrics. Please try again.")
+        print("There's been a problem retrieving lyrics. Did you spell correctly?")
 
 
 # TODO: debug maximum line length
