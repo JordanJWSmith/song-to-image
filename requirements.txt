@@ -1,0 +1,8 @@
+lyricsgenius
+argparse
+textblob
+tqdm
+sumy
+Pillow
+requests
+numpy
