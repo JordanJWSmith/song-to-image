@@ -84,19 +84,18 @@ If the lyric is too long to fit onto the image, the border width is increased an
 |:-------------------------------------------------------:|
 | ![Landslide by Fleetwood Mac](examples/october_sky.png) |
 
-test_october_sky_lsa_23-02-23-172558.png
 ## Next Steps
 
 ### Experiment with more complex prompt engineering
 - Use a [prompt generator model](https://huggingface.co/succinctly/text2image-prompt-generator) from Hugging Face to 
 expand the prompt
-- Aim to extract a descriptive and noun-heavy line via summarizer
+- Aim to extract a particularly descriptive and noun-heavy line via summarizer
 - Define more hyperparameters via inference API
 
 ### Experiment with more thorough text cleaning
 - Strip the lyrics to plaintext and use a 
 [punctuator model](https://huggingface.co/oliverguhr/fullstop-punctuation-multilang-large?text=Yet+she+blushed+as+if+with+guilt+when+Cynthia+reading+her+thoughts+said+to+her+one+day+Molly+you%27re+very+glad+to+get+rid+of+us+are+not+you) to convert lyrics to prose. This may be more compatible with summarizer models.
-- Remove contents of brackets from lyrics. This is often `("whoah-oh)` or something similar. 
+- ~~Remove contents of brackets from lyrics. This is often `("whoah-oh)` or something similar.~~
 
 ### Deploy as a web app with smooth UX
 - Add Spotify login
