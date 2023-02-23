@@ -1,4 +1,5 @@
 import os
+import re
 import lyricsgenius
 import requests as r
 from io import BytesIO
@@ -66,33 +67,33 @@ def generate_prompt(text, title, artist):
 
 
 def generate_image(prompt):
-    for i in range(10):
-        try:
-            print('Generating image...')
-            # endpoint_url = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4"
-            endpoint_url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
+    print('Generating image...')
 
-            payload = {"inputs": prompt}
-            headers = {
-                "Authorization": f"Bearer {HF_TOKEN}",
-                "Content-Type": "application/json",
-                "Accept": "image/png"
-            }
-            response = r.post(endpoint_url, headers=headers, json=payload)
-            img = Image.open(BytesIO(response.content))
+    # endpoint_url = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4"
+    endpoint_url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
 
-            return img
-        except:
-            continue
-    return None
+    payload = {
+        "inputs": prompt
+    }
+    headers = {
+        "Authorization": f"Bearer {HF_TOKEN}",
+        "Content-Type": "application/json",
+        "Accept": "image/png"
+    }
+    response = r.post(endpoint_url, headers=headers, json=payload)
+    img = Image.open(BytesIO(response.content))
+
+    print('Done.')
+    return img
 
 
 def annotate(img, caption):
-    border_size = 50
+    border_size = img.size[0] // 10
+    font_size = border_size // 3
     img_with_border = ImageOps.expand(img, border=border_size, fill='black')
 
     draw = ImageDraw.Draw(img_with_border)
-    font = ImageFont.truetype("fonts/Courier Prime Bold.ttf", 16)
+    font = ImageFont.truetype("fonts/Courier Prime Bold.ttf", font_size)
     text_size = draw.textsize(caption, font=font)
 
     x = (img_with_border.width - text_size[0]) / 2
@@ -103,7 +104,9 @@ def annotate(img, caption):
 
 
 def save_fig(img, song_title, artist, summarizer):
-    song_title = song_title.lower().replace(" ", "_")
+    chars = r'[<>:"/\\|?*\s]'
+    song_title = re.sub(chars, '_', song_title).lower()
+    # song_title = song_title.lower().replace(" ", "_")
     artist = artist.lower().replace(" ", "_")
 
     now = datetime.now()
@@ -113,5 +116,9 @@ def save_fig(img, song_title, artist, summarizer):
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    img.save(os.path.join(save_dir, f'{song_title}_{summarizer}_{str_timestamp}.jpg'))
+    save_path = os.path.join(save_dir, f'{song_title}_{summarizer}_{str_timestamp}.png')
+
+    img.save(save_path)
+
+    print(f'Image saved at {save_path}')
 
