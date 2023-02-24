@@ -86,6 +86,7 @@ def generate_image(prompt):
         "Accept": "image/png"
     }
     response = r.post(endpoint_url, headers=headers, json=payload)
+    print(response.status_code)
 
     try:
         img = Image.open(BytesIO(response.content))
@@ -112,7 +113,8 @@ def annotate(img, caption):
     x = (img_with_border.width - text_size[0]) / 2
     y = img_with_border.height - (border_size / 2) - text_size[1] + 7
 
-    if text_size[0] > img_with_border.width:
+    # if text_size[0] > img_with_border.width:
+    if text_size[0] > img.width:
         midpoint = len(caption) // 2
 
         for i, line in enumerate(textwrap.wrap(caption, width=midpoint + 5)):

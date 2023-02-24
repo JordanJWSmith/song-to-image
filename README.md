@@ -76,6 +76,8 @@ I'm keen to keep this project lightweight instead of downloading huge model weig
 The returned image is annotated with the central lyric and saved. 
 If the lyric is too long to fit onto the image, the border width is increased and the text is wrapped.
 
+## Gallery
+
 |              Landslide by Fleetwood Mac               |
 |:-----------------------------------------------------:|
 | ![Landslide by Fleetwood Mac](examples/landslide.jpg) |
@@ -84,6 +86,18 @@ If the lyric is too long to fit onto the image, the border width is increased an
 |:-------------------------------------------------------:|
 | ![Landslide by Fleetwood Mac](examples/october_sky.png) |
 
+|                   Grand Theft Autumn by Fall Out Boy                   |
+|:----------------------------------------------------------------------:|
+| ![Grand Theft Autumn by Fall Out Boy](examples/grand_theft_autumn.png) |
+
+|                  Bohemian Rhapsody by Queen                   |
+|:-------------------------------------------------------------:|
+| ![Bohemian Rhapsody by Queen](examples/bohemian_rhapsody.png) |
+
+|              Queen Mab by Becca Stevens               |
+|:-----------------------------------------------------:|
+| ![Queen Mab by Becca Stevens](examples/queen_mab.png) |
+
 ## Next Steps
 
 ### Experiment with more complex prompt engineering
@@ -91,6 +105,7 @@ If the lyric is too long to fit onto the image, the border width is increased an
 expand the prompt
 - Aim to extract a particularly descriptive and noun-heavy line via summarizer
 - Define more hyperparameters via inference API
+- Currently the prompts are set to 'oil painting'; experiment with other styles such as 'concept art'
 
 ### Experiment with more thorough text cleaning
 - Strip the lyrics to plaintext and use a 
@@ -101,3 +116,7 @@ expand the prompt
 - Add Spotify login
 - Allow users to generate images for their most-played songs, etc
 - Create a 'scrapbook' of images for a given playlist
+
+### Other
+- Add arg to compare text prompts across all summarizer models before committing to generating the image
+- Add arg to choose `stable-diffusion` version, possibly other text-to-image models 
