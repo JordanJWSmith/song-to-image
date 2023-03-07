@@ -70,12 +70,17 @@ def extract_lyric(text, summarizer):
 
 
 def generate_prompt(text, title, artist):
+    # TODO: add alternative styles ('concept art, detailed, dreamlike', etc)
+    # minimalism
+    # concept art, dreamlike
     return f'{text}. {title} by {artist}. Oil painting, detailed.'
+    # return f'{text}. {title} by {artist}. Concept art, detailed, dreamlike.'
 
 
 def generate_image(prompt):
     print('Generating image...')
 
+    # TODO: try one and then the other if it fails
     # endpoint_url = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4"
     endpoint_url = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2-1"
 
