@@ -32,7 +32,7 @@ summarizers = {
 def process_args(args):
     if args.summarizer not in summarizers.keys():
         raise KeyError(f'The specified summarizer is not available. Please choose from: {list(summarizers.keys())}')
-    return args.title.title(), args.artist.title(), args.summarizer, args.prompt_engineer
+    return args.title.title(), args.artist.title(), args.summarizer, args.magic_prompt
 
 
 def get_lyrics(title, artist):
@@ -60,16 +60,18 @@ def process_lyrics(text):
     return lyrics
 
 
-def extract_lyric(text, summarizer):
+def extract_lyric(magic_prompt, text, summarizer):
     lyrics = text.replace('\n', '. ').replace(' . ', ' ')
     my_parser = PlaintextParser.from_string(lyrics, Tokenizer('english'))
     summarizer_model = summarizers[summarizer]
+    # num_sentences = 2 if magic_prompt else 1
     summary = summarizer_model(my_parser.document, sentences_count=1)
+    print(summary)
 
     return [str(sentence)[:-1] for sentence in summary][0]
 
 
-def magic_prompt(text):
+def get_magic_prompt(text):
     endpoint_url = "https://api-inference.huggingface.co/models/Gustavosta/MagicPrompt-Stable-Diffusion"
     headers = {"Authorization": f"Bearer {HF_TOKEN}"}
 
@@ -84,11 +86,11 @@ def magic_prompt(text):
     return output
 
 
-def generate_prompt(prompt_engineer, text, title, artist):
+def generate_prompt(magic_prompt, text, title, artist):
     # TODO: add alternative styles ('concept art, detailed, dreamlike', etc)
 
-    if prompt_engineer:
-        prompt = magic_prompt(text)[0]['generated_text']
+    if magic_prompt:
+        prompt = get_magic_prompt(text)[0]['generated_text']
         print('Magic prompt: ', prompt)
         return prompt
     else:
@@ -154,7 +156,7 @@ def annotate(img, caption):
     return img_with_border
 
 
-def save_fig(img, song_title, artist, summarizer, prompt_engineer, test=False):
+def save_fig(img, song_title, artist, summarizer, magic_prompt, test=False):
     chars = r'[<>:"/\\|?*\s]'
     song_title = re.sub(chars, '_', song_title).lower()
     artist = artist.lower().replace(" ", "_")
@@ -163,7 +165,7 @@ def save_fig(img, song_title, artist, summarizer, prompt_engineer, test=False):
     str_timestamp = now.strftime("%d-%m-%y-%H%M%S")
 
     save_dir = 'test_image' if test else 'output'
-    magic = '_magic' if prompt_engineer else ''
+    magic = '_magic' if magic_prompt else ''
 
     save_dir = os.path.join(f'{save_dir}', f'{song_title}_{artist}')
     if not os.path.exists(save_dir):
