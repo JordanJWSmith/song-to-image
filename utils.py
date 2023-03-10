@@ -32,7 +32,7 @@ summarizers = {
 def process_args(args):
     if args.summarizer not in summarizers.keys():
         raise KeyError(f'The specified summarizer is not available. Please choose from: {list(summarizers.keys())}')
-    return args.title.title(), args.artist.title(), args.summarizer
+    return args.title.title(), args.artist.title(), args.summarizer, args.prompt_engineer
 
 
 def get_lyrics(title, artist):
@@ -69,12 +69,30 @@ def extract_lyric(text, summarizer):
     return [str(sentence)[:-1] for sentence in summary][0]
 
 
-def generate_prompt(text, title, artist):
+def magic_prompt(text):
+    endpoint_url = "https://api-inference.huggingface.co/models/Gustavosta/MagicPrompt-Stable-Diffusion"
+    headers = {"Authorization": f"Bearer {HF_TOKEN}"}
+
+    def query(payload):
+        response = r.post(endpoint_url, headers=headers, json=payload)
+        return response.json()
+
+    output = query({
+        "inputs": text,
+    })
+
+    return output
+
+
+def generate_prompt(prompt_engineer, text, title, artist):
     # TODO: add alternative styles ('concept art, detailed, dreamlike', etc)
-    # minimalism
-    # concept art, dreamlike
-    return f'{text}. {title} by {artist}. Oil painting, detailed.'
-    # return f'{text}. {title} by {artist}. Concept art, detailed, dreamlike.'
+
+    if prompt_engineer:
+        prompt = magic_prompt(text)[0]['generated_text']
+        print('Magic prompt: ', prompt)
+        return prompt
+    else:
+        return f'{text}. {title} by {artist}. Oil painting, detailed.'
 
 
 def generate_image(prompt):
@@ -136,7 +154,7 @@ def annotate(img, caption):
     return img_with_border
 
 
-def save_fig(img, song_title, artist, summarizer, test=False):
+def save_fig(img, song_title, artist, summarizer, prompt_engineer, test=False):
     chars = r'[<>:"/\\|?*\s]'
     song_title = re.sub(chars, '_', song_title).lower()
     artist = artist.lower().replace(" ", "_")
@@ -144,16 +162,14 @@ def save_fig(img, song_title, artist, summarizer, test=False):
     now = datetime.now()
     str_timestamp = now.strftime("%d-%m-%y-%H%M%S")
 
-    if test:
-        save_dir = 'test_images'
-    else:
-        save_dir = 'output'
+    save_dir = 'test_image' if test else 'output'
+    magic = '_magic' if prompt_engineer else ''
 
     save_dir = os.path.join(f'{save_dir}', f'{song_title}_{artist}')
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    save_path = os.path.join(save_dir, f'{song_title}_{summarizer}_{str_timestamp}.png')
+    save_path = os.path.join(save_dir, f'{song_title}_{summarizer}_{str_timestamp}{magic}.png')
 
     img.save(save_path)
 
