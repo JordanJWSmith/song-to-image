@@ -71,12 +71,12 @@ model via Hugging Face to 'enhance' the image prompt. This model has been traine
 
 This method is still under experimentation to determine its best usage. The results for MagicPrompt are currently less 
 consistent, can often veer away from the subject matter and have a suspicious tendency towards anime (though this is 
-mitigated by filtering out references to artstation). 
+reduced slightly by filtering out references to artstation). 
 
 
 |                         |                  Extracted Lyric                  |                                                                                                          MagicPrompt                                                                                                          |                 Result                 |
 |:-----------------------:|:-------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------:|
- | GOOD :heavy_check_mark: |   `This is the place my heart longs to be`        | `This is the place my heart longs to be stopped By sophie anderson and bill ward, dramatic light, city background, sunset, neuromancer, blade runner, hyperrealistic, blade runner 2 0 4 9 Man In Room 39, The Arcadian Wild` | ![](examples/man_in_room_39_magic.png) | 
+ | GOOD :heavy_check_mark: |     `This is the place my heart longs to be`      | `This is the place my heart longs to be stopped By sophie anderson and bill ward, dramatic light, city background, sunset, neuromancer, blade runner, hyperrealistic, blade runner 2 0 4 9 Man In Room 39, The Arcadian Wild` | ![](examples/man_in_room_39_magic.png) | 
 |         BAD :x:         | `But I won't stay on the shelf 'til the next one` |                                                           `But I won't stay on the shelf 'til the next one starts to pour bleach, Out Of Love, Busty And The Bass`                                                            |  ![](examples/out_of_love_magic.png)   |
 
 
