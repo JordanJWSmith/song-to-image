@@ -22,6 +22,7 @@ def main():
         lyrics = process_lyrics(song.lyrics)
         line = extract_lyric(magic_prompt, lyrics, summarizer)
         prompt = generate_prompt(magic_prompt, line, song_title, artist)
+        print('image prompt: ', prompt)
         img = generate_image(prompt)
 
         if img:

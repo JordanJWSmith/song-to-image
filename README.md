@@ -39,14 +39,17 @@ Now you're good to go!
 ## Usage
 Run `main.py` with separate arguments for the song title and artist.
 ```python
-python main.py "<song_title>" "<artist>" "<summarizer>"
+python main.py "<song_title>" "<artist>" "<summarizer>" --magic_prompt
 ```
+
+### Optional: Summarizer Model
 
 A third optional argument may be provided to specify the type of summarizer model. 
 This model is used to extract the most prominant line from the song's lyrics.
-Currently there are two options:
+Currently there are three options:
 - `luhn`
 - `lsa`
+- `lexrank`
 
 This defaults to `luhn` if no argument is provided.
 
@@ -58,6 +61,28 @@ Results may differ depending on the chosen model. For example:
 | `python main.py "teenage dirtbag" "wheatus" "lsa"`  | ![](examples/teenage_dirtbag_lsa.jpg)  |
 
 In this case the difference in text extraction is subtle. In others it may be more prominent. 
+
+### Optional: MagicPrompt
+
+An additional optional flag may be provided: `--magic_prompt`. 
+This uses the [Gustavosta/MagicPrompt-Stable-Diffusion](https://huggingface.co/Gustavosta/MagicPrompt-Stable-Diffusion) 
+model via Hugging Face to 'enhance' the image prompt. This model has been trained on tens of thousands of 
+`stable-diffusion` prompts. 
+
+This method is still under experimentation to determine its best usage. The results for magicprompt are currently less 
+consistent, can often veer away from the subject matter and have a suspicious tendency towards anime (though this is 
+mitigated by filtering out references to artstation). 
+
+
+|                         |                  Extracted Lyric                  |                                                                                                          MagicPrompt                                                                                                          |                 Result                 |
+|:-----------------------:|:-------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------------:|
+ | GOOD :heavy_check_mark: |   `This is the place my heart longs to be`        | `This is the place my heart longs to be stopped By sophie anderson and bill ward, dramatic light, city background, sunset, neuromancer, blade runner, hyperrealistic, blade runner 2 0 4 9 Man In Room 39, The Arcadian Wild` | ![](examples/man_in_room_39_magic.png) | 
+|         BAD :x:         | `But I won't stay on the shelf 'til the next one` |                                                           `But I won't stay on the shelf 'til the next one starts to pour bleach, Out Of Love, Busty And The Bass`                                                            |  ![](examples/out_of_love_magic.png)   |
+
+
+
+
+
 
 ## Design
 ![Architecture](examples/song-to-image.png)

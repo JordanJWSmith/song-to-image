@@ -64,7 +64,7 @@ def extract_lyric(magic_prompt, text, summarizer):
     lyrics = text.replace('\n', '. ').replace(' . ', ' ')
     my_parser = PlaintextParser.from_string(lyrics, Tokenizer('english'))
     summarizer_model = summarizers[summarizer]
-    num_sentences = 2 if magic_prompt else 1
+    # num_sentences = 2 if magic_prompt else 1
     summary = summarizer_model(my_parser.document, sentences_count=1)
 
     return [str(sentence)[:-1] for sentence in summary][0]
@@ -82,8 +82,12 @@ def get_magic_prompt(text):
         "inputs": text,
     })
 
-    prompt = output[0]['generated_text']
-    split_prompt = [clause for clause in prompt.split(',') if 'artstation' not in clause]
+    print('output: ', output)
+
+    prompt = output[0]['generated_text'].replace('\n', '')
+    print('Raw magic prompt: ', prompt)
+    ignore = ['artstation', 'art station']
+    split_prompt = [clause for clause in prompt.split(',') if all([phrase not in clause for phrase in ignore])]
     prompt = ','.join(split_prompt)
 
     return prompt
@@ -93,7 +97,8 @@ def generate_prompt(magic_prompt, text, title, artist):
 
     if magic_prompt:
         prompt = get_magic_prompt(text)
-        print('Magic prompt: ', prompt)
+        prompt += f', {title}, {artist}'
+        # print('Magic prompt: ', prompt)
         return prompt
     else:
         # TODO: add alternative styles ('concept art, detailed, dreamlike', etc)
