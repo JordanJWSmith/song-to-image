@@ -69,7 +69,7 @@ This uses the [Gustavosta/MagicPrompt-Stable-Diffusion](https://huggingface.co/G
 model via Hugging Face to 'enhance' the image prompt. This model has been trained on tens of thousands of 
 `stable-diffusion` prompts. 
 
-This method is still under experimentation to determine its best usage. The results for magicprompt are currently less 
+This method is still under experimentation to determine its best usage. The results for MagicPrompt are currently less 
 consistent, can often veer away from the subject matter and have a suspicious tendency towards anime (though this is 
 mitigated by filtering out references to artstation). 
 
@@ -81,11 +81,8 @@ mitigated by filtering out references to artstation).
 
 
 
-
-
-
 ## Design
-![Architecture](examples/song-to-image.png)
+![Architecture](examples/architecture.png)
 
 The script takes a song title and artist as compulsory artists. 
 The Genius API is used via the `lyricsgenius` wrapper to webscrape the song lyrics. 
