@@ -99,6 +99,8 @@ The returned image is annotated with the central lyric and saved.
 If the lyric is too long to fit onto the image, the border width is increased and the text is wrapped.
 
 ## Gallery
+These images have been generated using `luhn` or `lsa` summarizer models, and have not used MagicPrompt. 
+The script has developed a relatively consistent and distinct style. 
 
 |              Landslide by Fleetwood Mac               |
 |:-----------------------------------------------------:|
