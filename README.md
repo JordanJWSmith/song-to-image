@@ -100,7 +100,8 @@ If the lyric is too long to fit onto the image, the border width is increased an
 
 ## Gallery
 These images have been generated using `luhn` or `lsa` summarizer models, and have not used MagicPrompt. 
-The script has developed a relatively consistent and distinct style. 
+The script has developed a relatively consistent and distinct style. For a larger gallery, check out 
+[my project page](https://marshy-hen-245.notion.site/song-to-image-b0ebe61c752b4a17990c48c6b3a0bdd3).
 
 |              Landslide by Fleetwood Mac               |
 |:-----------------------------------------------------:|
